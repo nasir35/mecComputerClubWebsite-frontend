@@ -13,7 +13,7 @@ const Page = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:4000/api/page");
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/page`);
         if (response.status === 200) {
           setData(response.data.data);
           setLoading(false);

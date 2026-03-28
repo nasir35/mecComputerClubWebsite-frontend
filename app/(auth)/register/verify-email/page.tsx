@@ -1,15 +1,15 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import { Mail, ShieldCheck, AlertCircle, CheckCircle2, Loader2, ArrowRight } from "lucide-react";
 import axios, { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import UnauthorizedPage from "@/components/ui/shared/Unauthorized";
 
-const EmailVerifyPage = () => {
+const EmailVerifyForm = () => {
   // States
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const [status, setStatus] = useState<"typing" | "verifying" | "success" | "error" | "expired">(
-    "typing"
+    "typing",
   );
   const [errorMessage, setErrorMessage] = useState("");
   const [hasAccess, setHasAccess] = useState(true);
@@ -76,12 +76,12 @@ const EmailVerifyPage = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/users/verify/code",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/verify/code`,
         {
           email,
           code: fullCode,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (res.status === 200) {
         console.log("Email verified successfully");
@@ -203,6 +203,14 @@ const EmailVerifyPage = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const EmailVerifyPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EmailVerifyForm />
+    </Suspense>
   );
 };
 

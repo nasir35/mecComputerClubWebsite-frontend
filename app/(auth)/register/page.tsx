@@ -25,7 +25,7 @@ export default function InvitationPage() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:4000/api/invite/verify",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/invite/verify`,
         { code: inviteCode },
         { withCredentials: true }
       );

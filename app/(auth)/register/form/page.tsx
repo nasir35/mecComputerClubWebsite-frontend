@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, {
   useState,
@@ -7,6 +6,7 @@ import React, {
   ChangeEventHandler,
   useRef,
   useEffect,
+  Suspense,
 } from "react";
 import { User, Facebook, Github, Linkedin } from "lucide-react";
 import ToastNotification, { Toast } from "@/components/ui/shared/ToastNotification";
@@ -63,7 +63,7 @@ type FieldName = keyof typeof formDataInitial;
 // Type: Includes all form fields plus 'file' for image validation
 type FormErrorKeys = FieldName | "file";
 
-export default function App() {
+function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -76,7 +76,7 @@ export default function App() {
   const [validCode, setValidCode] = useState(true);
   const searchParams = useSearchParams();
   const [validationErrors, setValidationErrors] = useState<Partial<Record<FormErrorKeys, string>>>(
-    {}
+    {},
   );
 
   const router = useRouter();
@@ -242,7 +242,7 @@ export default function App() {
         "batch",
         "session",
         "contactNumber",
-        "address"
+        "address",
       );
       if (formData.isGraduated) {
         fieldsToValidate.push("passingYear");
@@ -289,7 +289,7 @@ export default function App() {
 
   // Clear error on input change
   const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value, type } = e.target;
     const fieldName = name as FieldName;
@@ -396,9 +396,13 @@ export default function App() {
       }
 
       try {
-        const response = await axios.post("http://localhost:4000/api/users/register", payload, {
-          withCredentials: true,
-        });
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/register`,
+          payload,
+          {
+            withCredentials: true,
+          },
+        );
 
         if (response.status === 201) {
           setToast({ message: "Registration successful!", type: "success" });
@@ -804,8 +808,8 @@ export default function App() {
                 validationErrors.file
                   ? "border-red-500"
                   : isDragOver
-                  ? "border-indigo-500"
-                  : "border-gray-300"
+                    ? "border-indigo-500"
+                    : "border-gray-300"
               } relative transition-all duration-200`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -840,8 +844,8 @@ export default function App() {
                 {imageFile
                   ? imageFile.name
                   : isDragOver
-                  ? "Drop image here..."
-                  : "Drag & drop or click to upload"}
+                    ? "Drop image here..."
+                    : "Drag & drop or click to upload"}
               </p>
               {/* Hidden File Input activated by label */}
               <label
@@ -1088,5 +1092,13 @@ export default function App() {
         <ToastNotification type={toast?.type} message={toast?.message} onClose={handleToastClose} />
       )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <RegistrationForm />
+    </Suspense>
   );
 }

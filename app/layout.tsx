@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CurrencyProvider } from "@/lib/CurrencyContext";
@@ -91,6 +92,7 @@ export default function RootLayout({
         className={` ${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
+        <NextTopLoader color="#2563eb" showSpinner={false} />
         <CurrencyProvider>
           <DarkModeProvider>
             <BlackFridayProvider>

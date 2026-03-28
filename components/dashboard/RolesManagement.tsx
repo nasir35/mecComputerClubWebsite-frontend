@@ -38,9 +38,13 @@ const RolesManagement = () => {
         { withCredentials: true }
       );
       setSearchedUser(res.data.data);
-    } catch (err: AxiosError | any) {
+    } catch (err: unknown) {
       console.error("User search error:", err);
-      setError(err?.response?.data?.message);
+      if (err instanceof AxiosError) {
+        setError(err?.response?.data?.message || "An error occurred");
+      } else {
+        setError("Something went wrong!");
+      }
     } finally {
       setLoading(false);
     }

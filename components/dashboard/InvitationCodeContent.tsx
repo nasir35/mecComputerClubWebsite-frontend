@@ -56,12 +56,14 @@ const InvitationCodeContent = () => {
       ); // Assuming API returns the created invite object
 
       setInvitationResult(res.data.invite);
-    } catch (error: AxiosError | any) {
+    } catch (error: unknown) {
       console.error("Error inviting user:", error); // Display error right next to input (if it's an email validation error)
-      if (error.response?.data?.message.includes("Email")) {
+      if (error instanceof AxiosError && error.response?.data?.message.includes("Email")) {
         setEmailError(error.response.data.message);
-      } else {
+      } else if (error instanceof AxiosError) {
         setInviteError(error.response?.data?.message || "An unexpected error occurred.");
+      } else {
+        setInviteError("An unexpected error occurred.");
       } // Assuming you use a toast notification for general errors // toast.error(error.response?.data?.message || "Invitation failed.");
     } finally {
       setLoading(false);

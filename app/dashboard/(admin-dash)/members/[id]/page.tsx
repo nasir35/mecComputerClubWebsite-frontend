@@ -133,9 +133,12 @@ export default function MemberDetailsPage() {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:4000/api/users/profile/${userId}`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${userId}`,
+          {
+            withCredentials: true,
+          }
+        );
         setUser(response.data.data);
       } catch (error) {
         console.log("Error fetching user data.", error);

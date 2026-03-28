@@ -21,7 +21,10 @@ const ForgotPassword: React.FC = () => {
     setMessage(null);
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:4000/api/users/password/request", { email });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/password/request`,
+        { email }
+      );
       const data = res.data;
 
       if (res.status !== 200) {

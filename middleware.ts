@@ -7,6 +7,8 @@ export async function middleware(req: NextRequest) {
   // MAKE IT ASYNC
   const invitationCookie = req.cookies.get("invitation_validated")?.value;
   const token = req.cookies.get("auth_token")?.value;
+  // console.log("cookie: ", req.headers.get("cookie"));
+  // console.log("token: ", token);
   const { pathname } = req.nextUrl;
 
   let payload: CustomJWTPayload | null = null;

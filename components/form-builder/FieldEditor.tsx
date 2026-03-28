@@ -22,8 +22,8 @@ const FIELD_TYPES: FieldType[] = [
 
 export default function FieldEditor({ field, onChange, onRemove }: Props) {
   // Helper to update specific keys
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const update = (key: keyof FormField, value: any) => onChange({ ...field, [key]: value });
+  const update = (key: keyof FormField, value: unknown) =>
+    onChange({ ...field, [key]: value } as FormField);
 
   const needsOptions = ["select", "radio", "checkbox"].includes(field.type);
 

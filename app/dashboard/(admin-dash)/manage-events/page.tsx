@@ -42,7 +42,7 @@ export default function EventsManagementPage() {
     // Fetch forms from API (mocked here)
     const fetchForms = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/forms");
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/forms`);
         const data = response.data.data;
         setForms(data);
       } catch (error) {
@@ -51,7 +51,7 @@ export default function EventsManagementPage() {
     };
     const fetchEvents = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/events");
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/events`);
         const data = response.data.data;
         setEvents(data);
       } catch (error) {
@@ -308,8 +308,15 @@ export default function EventsManagementPage() {
 }
 
 // Reusable Small Component for CMS Cards
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function CMSCard({ title, desc, icon, btnText, btnColor }: any) {
+interface CMSCardProps {
+  title: string;
+  desc: string;
+  icon: React.ReactNode;
+  btnText: string;
+  btnColor: string;
+}
+
+function CMSCard({ title, desc, icon, btnText, btnColor }: CMSCardProps) {
   return (
     <div className="flex items-center justify-between p-5 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center gap-4">

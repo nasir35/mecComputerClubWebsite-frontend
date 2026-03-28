@@ -53,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Fetch user data from backend
   const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/users/me", {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`, {
         withCredentials: true,
       });
       const userData: AuthUser = res.data.user;
@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/users/login",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -111,7 +111,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/users/logout",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/logout`,
         {},
         {
           withCredentials: true,

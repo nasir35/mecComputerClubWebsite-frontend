@@ -14,7 +14,7 @@ import {
 export interface MenuItem {
   key: string;
   label: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 export interface DashboardMenuConfig {

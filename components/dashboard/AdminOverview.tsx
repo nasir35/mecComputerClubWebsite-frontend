@@ -26,9 +26,12 @@ export default function AdminOverview() {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:4000/api/dashboard/admin-stats", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/admin-stats`,
+          {
+            withCredentials: true,
+          }
+        );
         setStats(res.data.data);
         setLoading(false);
       } catch (error) {

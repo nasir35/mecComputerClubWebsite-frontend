@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import Head from "next/head";
@@ -13,7 +13,7 @@ interface ResetFormState {
   confirmPassword: string;
 }
 
-const ResetPassword: React.FC = () => {
+const ResetPasswordForm: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -71,7 +71,7 @@ const ResetPassword: React.FC = () => {
       if (token === undefined || token === null) {
         token = verificationCode;
       }
-      const res = await axios.post("http://localhost:4000/api/users/password/reset", {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/password/reset`, {
         email: email,
         token: token,
         newPassword: formData.password,
@@ -238,8 +238,22 @@ const ResetPassword: React.FC = () => {
           </button>
         </form>
       </div>
-      {toast && <ToastNotification toast={toast} setToast={setToast} />}
+      {toast && (
+        <ToastNotification
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
+  );
+};
+
+const ResetPassword: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 };
 

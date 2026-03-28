@@ -26,7 +26,7 @@ export default function HomePageEditor({ initialData }: { initialData?: Partial<
   // --- Handlers ---
 
   // 1. Generic Deep Update Handler (for nested objects like heroSection.stats)
-  const updateField = (path: string, value: any) => {
+  const updateField = (path: string, value: unknown) => {
     setFormData((prev) => {
       const newData = { ...prev };
       const keys = path.split(".");

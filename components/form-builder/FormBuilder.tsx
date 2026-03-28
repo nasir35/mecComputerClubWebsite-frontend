@@ -71,7 +71,7 @@ export default function FormBuilder() {
 
       // console.log("Submitting form data:", formData);
 
-      res = await axios.post("http://localhost:4000/api/forms", formData, {
+      res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/forms`, formData, {
         withCredentials: true,
       });
       console.log("Form saved successfully!", res.data);

@@ -1,16 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  CheckCircle,
-  XCircle,
-  User,
-  Clock,
-  Search,
-  Filter,
-  MoreVertical,
-  ExternalLink,
-  ShieldAlert,
-} from "lucide-react";
+import { CheckCircle, XCircle, Clock, Search, Filter, MoreVertical } from "lucide-react";
 import axios from "axios";
 import LoadingScreen from "../ui/shared/LoadingScreen";
 
@@ -31,7 +21,7 @@ const AdminPendingPage = () => {
     const fetchPendingApplications = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/dashboard/members",
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/members`,
           {
             filter: {
               property: "applicationStatus",
@@ -57,7 +47,7 @@ const AdminPendingPage = () => {
   const handleAction = async (id: string, action: "approved" | "rejected", reason?: string) => {
     try {
       const res = await axios.patch(
-        `http://localhost:4000/api/dashboard/application-status/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/application-status/${id}`,
         {
           status: action,
           reason,
