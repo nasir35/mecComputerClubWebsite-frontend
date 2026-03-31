@@ -8,6 +8,7 @@ import React, {
   useContext,
   ReactNode,
 } from "react";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Toast } from "@/components/ui/shared/ToastNotification";
@@ -75,10 +76,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`,
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const { token, user: userData } = res.data;
+      // ✅ Set the cookie on YOUR domain (meccomputerclub.org)
+      Cookies.set("auth_token", token, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict", // or "Lax" — same-site now since it's your domain
+      });
       userData.token = token;
       setUser(userData);
 
@@ -110,14 +117,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/logout`,
         {},
         {
           withCredentials: true,
-        }
+        },
       );
-      console.log(res);
+
+      // Clear the cookie on logout
+      Cookies.remove("auth_token", {
+        secure: true,
+        sameSite: "Strict",
+      });
       setToast({
         type: "success",
         message: "Logged out successfully!",
